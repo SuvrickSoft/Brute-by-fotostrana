@@ -24,31 +24,39 @@ namespace brute
         {
             InitializeComponent();
             DataContext = this;
-            p = Proxy.Settings;
-            p.ProxyEmpty += P_ProxyEmpty;
+
         }
 
-        private void P_ProxyEmpty(string msg)
-        {
-            Stop();
-        }
 
+
+        
         public static List<string> emails = new List<string>();
 
         private void btn_Click(object sender, RoutedEventArgs e)
         {
 
-            using (var reader = new StreamReader(Directory.GetCurrentDirectory() + @"\Emails\bad.txt"))
-            {
-                string str = string.Empty;
-                while ((str = reader.ReadLine()) != null)
-                {
-                    if (!emails.Contains(str))
-                        emails.Add(str); 
-                }
-            }
+            Unit unit = new Unit("nemiro-f@yandex.ru");
+            unit.UnitMsg += Unit_UnitMsg;
+            unit.Registration();
+            
 
-            Start();
+
+            //using (var reader = new StreamReader(Directory.GetCurrentDirectory() + @"\Emails\bad.txt"))
+            //{
+            //    string str = string.Empty;
+            //    while ((str = reader.ReadLine()) != null)
+            //    {
+            //        if (!emails.Contains(str))
+            //            emails.Add(str); 
+            //    }
+            //}
+
+            //Start();
+        }
+
+        private void Unit_UnitMsg(string msg)
+        {
+            tb.AppendText(msg + Environment.NewLine);
         }
 
         List<Thread> threads = new List<Thread>();
@@ -108,18 +116,14 @@ namespace brute
                 }
 
 
-                string s;
+                string s = "1";
                 Unit unit = new Unit(email);
-                unit.Registr(out s);
+               // unit.Registration(out s);
                 tb.Dispatcher.BeginInvoke(new Action(() => { tb.Text += s + Environment.NewLine; }));
 
                 
             }
         }
 
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            p.SaveProperty();
-        }
     }
 }
